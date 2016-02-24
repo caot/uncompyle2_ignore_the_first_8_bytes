@@ -31,8 +31,7 @@ def _load_module(filename, ignore_the_first_8_bytes=False, is_zlib_decompress=Fa
         # print version
         fp.read(4)  # timestamp
     else:
-        version = sys.version
-        version = version[: version.index('.', 2)]
+        version = '%s.%s' % sys.version_info[:2]
         version = float(version)
 
     co = dis.marshalLoad(fp)
@@ -103,8 +102,16 @@ def decompile(files, is_zlib_decompress):
 
 
 def decompile_zlib_decompress(zlib_decompress):
+    '''
+    StringIO — Read and write strings as files
 
-    fio = StringIO.StringIO(zlib_decompress)
+    This module implements a file-like class, StringIO, that reads and writes a 
+    string buffer (also known as memory files). See the description of file 
+    objects for operations (section File Objects). (For standard strings, see 
+    str and unicode.)
+    '''
+    fio = cStringIO.StringIO(zlib_decompress)
     is_zlib_decompress = True
 
     decompile(fio, is_zlib_decompress)
+    fio.close()
